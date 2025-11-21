@@ -1,3 +1,4 @@
+// eslint.config.cjs
 const js = require('@eslint/js');
 const globals = require('globals');
 const { defineConfig } = require('eslint/config');
