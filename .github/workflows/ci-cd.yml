@@ -19,6 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Installer Heroku CLI
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      # Login à Heroku
       - name: Login to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
@@ -26,10 +32,12 @@ jobs:
           echo "$HEROKU_API_KEY" | heroku auth:token
           heroku container:login
 
+      # Build et push du container Docker
       - name: Build & Push Docker image
         run: |
           heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
 
+      # Release de l’application
       - name: Release App
         run: |
           heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
