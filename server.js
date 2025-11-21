@@ -59,10 +59,10 @@ const options = {
     "./controllers/*.js",
     "./models/*.js" ]
 };
-app.use("/users",auth,apiLimiter, userRoutes);
 app.get("/herokutest", (req, res) => {
   return res.send("Heroku is working!");
 });
+app.use("/users",auth,apiLimiter, userRoutes);
 app.use("/products",apiLimiter, productRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/auth",authLimiter, authRoutes);
