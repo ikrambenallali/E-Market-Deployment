@@ -60,8 +60,8 @@ const options = {
     "./models/*.js" ]
 };
 app.use("/users",auth,apiLimiter, userRoutes);
-app.use("/herokutest", (req, res) => {
-  res.send("Heroku is working!");
+app.get("/herokutest", (req, res) => {
+  return res.send("Heroku is working!");
 });
 app.use("/products",apiLimiter, productRoutes);
 app.use("/categories", categoryRoutes);
