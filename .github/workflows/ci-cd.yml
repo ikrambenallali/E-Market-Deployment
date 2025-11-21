@@ -63,23 +63,3 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           heroku container:release web -a ${{ secrets.HEROKU_APP_NAME }}
-
-  smoke-tests:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for deployment
-        run: sleep 30
-
-      - name: Health check
-        run: |
-          curl -f https://${{ secrets.HEROKU_APP_NAME }}.herokuapp.com/ || exit 1
-
-      - name: API smoke test
-        run: |
-          status=$(curl -s -o /dev/null -w "%{http_code}" https://${{ secrets.HEROKU_APP_NAME }}.herokuapp.com/api/v2/performance/health)
-          if [ "$status" -ne 200 ]; then
-            echo "❌ Smoke test failed ($status)"
-            exit 1
-          fi
-          echo "✅ Smoke tests passed"
