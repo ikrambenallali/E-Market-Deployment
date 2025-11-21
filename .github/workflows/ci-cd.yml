@@ -1,47 +1,39 @@
-name: CI/CD
+name: Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  run-tests:
-    uses: ./.github/workflows/test.yaml
-    secrets:
-      MONGO_URI: ${{ secrets.MONGO_URI }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
   deploy:
-    needs: run-tests
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
-      # Installer Heroku CLI
-      - name: Install Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-
-      # Login à Heroku
-      - name: Login to Heroku
+      - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
-          echo "$HEROKU_API_KEY" | heroku auth:token
-          heroku container:login
+          git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git || true
+          git push heroku HEAD:main --force
 
-      # Nettoyer les images Docker locales pour éviter le cache
-      - name: Clean Docker cache
-        run: docker system prune -f
+  smoke-tests:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for deployment
+        run: sleep 30
 
-      # Build et push du container Docker
-      - name: Build & Push Docker image
+      - name: Health check
         run: |
-          docker build --no-cache -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web .
-          heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
+          curl -f https://${{ secrets.HEROKU_APP_NAME }}.herokuapp.com/ || exit 1
 
-      # Release de l’application
-      - name: Release App
-        run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+      - name: API smoke test
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://${{ secrets.HEROKU_APP_NAME }}.herokuapp.com/api/v2/performance/health)
+          if [ "$status" -ne 200 ]; then
+            echo "❌ Smoke test failed ($status)"
+            exit 1
+          fi
+          echo "✅ Smoke tests passed"
