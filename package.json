@@ -48,7 +48,7 @@
     "seed": "cross-env NODE_ENV=development node ./seeders/seed.js",
     "mocha test": "mocha test/*.js",
     "super test": "supertest",
-    "test": "  cross-env  NODE_ENV=test mocha --timeout 10000",
+    "test": "  cross-env  NODE_ENV=test mocha --timeout 10000 --exit",
     "test:unit:order": " cross-env NODE_ENV=test mocha test/order.test.js --timeout 10000",
     "test:unit:cart": " cross-env NODE_ENV=test mocha test/cart.test.js --timeout 10000",
     "test:unit:review": " cross-env NODE_ENV=test mocha test/reviews.unit.test.js --timeout 10000",
