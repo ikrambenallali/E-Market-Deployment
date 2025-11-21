@@ -1,0 +1,55 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - run: npm ci
+
+      - name: Run tests
+        env:
+          DB_URI: mongodb://localhost:27017/e_market_test
+          JWT_SECRET: test_secret_jwt
+          NODE_ENV: test
+          PORT: 3000
+        run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          echo "$HEROKU_API_KEY" | heroku auth:token
+          heroku container:login
+
+      - name: Build & Push Docker image
+        run: |
+          heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
+
+      - name: Release App
+        run: |
+          heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}

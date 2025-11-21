@@ -60,8 +60,8 @@ const options = {
     "./models/*.js" ]
 };
 app.use("/users",auth,apiLimiter, userRoutes);
-app.use("/products",auth,apiLimiter, productRoutes);
-app.use("/categories",auth, categoryRoutes);
+app.use("/products",apiLimiter, productRoutes);
+app.use("/categories", categoryRoutes);
 app.use("/auth",authLimiter, authRoutes);
 app.use("/profiles", auth,apiLimiter, profileRoutes);
 app.use("/product", viewRoutes);
