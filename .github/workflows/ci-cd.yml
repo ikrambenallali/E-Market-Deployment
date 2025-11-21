@@ -32,12 +32,16 @@ jobs:
           echo "$HEROKU_API_KEY" | heroku auth:token
           heroku container:login
 
+      # Nettoyer les images Docker locales pour éviter le cache
+      - name: Clean Docker cache
+        run: docker system prune -f
+
       # Build et push du container Docker
       - name: Build & Push Docker image
         run: |
+          docker build --no-cache -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web .
           heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
 
       # Release de l’application
       - name: Release App
-        run: |
-          heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+        run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
