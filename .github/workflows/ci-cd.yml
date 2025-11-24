@@ -36,13 +36,13 @@ jobs:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
-  # lint-format:
-  #   uses: ./.github/workflows/lint_format.yaml
+  lint-format:
+    uses: ./.github/workflows/lint_format.yaml
 
 
   deploy:
     needs:
-      # - lint-format
+      - lint-format
       - run-tests
       - build-and-push
     runs-on: ubuntu-latest
