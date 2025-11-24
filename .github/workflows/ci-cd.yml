@@ -39,9 +39,10 @@ jobs:
   lint-format:
     uses: ./.github/workflows/lint_format.yaml
 
-    
+
   deploy:
     needs:
+      - lint-format
       - run-tests
       - build-and-push
     runs-on: ubuntu-latest
