@@ -27,17 +27,19 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/e-market-api:latest
-          build-args: NODE_ENV=production
+          build-args: |
+            NODE_ENV=production
 
   run-tests:
     uses: ./.github/workflows/test.yaml
     secrets:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
   deploy:
-     needs:
-    - run-tests
-    - build-and-push
+    needs:
+      - run-tests
+      - build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
