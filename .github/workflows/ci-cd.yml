@@ -29,7 +29,13 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/e-market-api:latest
           build-args: NODE_ENV=production
 
+  run-tests:
+    uses: ./.github/workflows/test.yaml
+    secrets:
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
   deploy:
+      needs: run-tests
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
