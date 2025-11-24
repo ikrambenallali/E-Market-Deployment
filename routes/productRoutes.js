@@ -15,7 +15,9 @@ const {
 } = require("../validators/productValidation");
 
 const auth = require("../middlewares/auth");
-const { checkProductOwnership } = require("../middlewares/checkProductOwnership");
+const {
+  checkProductOwnership,
+} = require("../middlewares/checkProductOwnership");
 const { strictLimiter } = require("../middlewares/rate-limiter");
 
 const router = express.Router();
@@ -23,8 +25,21 @@ const router = express.Router();
 router.get("/", getProducts);
 router.get("/:id", getOneProduct);
 
-router.post("/", strictLimiter, upload.array("images", 5), validate(createProductSchema), createProduct);
-router.put("/:id", strictLimiter, checkProductOwnership, upload.array("images", 5), validate(updateProductSchema), editProduct);
+router.post(
+  "/",
+  strictLimiter,
+  upload.array("images", 5),
+  validate(createProductSchema),
+  createProduct,
+);
+router.put(
+  "/:id",
+  strictLimiter,
+  checkProductOwnership,
+  upload.array("images", 5),
+  validate(updateProductSchema),
+  editProduct,
+);
 
 router.delete("/:id", checkProductOwnership, deleteProduct);
 

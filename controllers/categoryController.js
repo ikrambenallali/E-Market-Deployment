@@ -154,7 +154,7 @@ async function updateCategory(req, res, next) {
       {
         name: req.body.name,
       },
-      { new: true }
+      { new: true },
     );
     res.status(200).json({
       message: "category updated succesfully",

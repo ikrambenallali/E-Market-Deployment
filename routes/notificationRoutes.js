@@ -1,11 +1,8 @@
 // routes/notificationRoutes.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const NotificationController = require('../controllers/notificationController');
+const NotificationController = require("../controllers/notificationController");
 const controller = new NotificationController();
-
-
-
 
 /**
  * @swagger
@@ -95,13 +92,11 @@ const controller = new NotificationController();
  *         description: Notification non trouvée
  */
 
-router.get('/',controller.getNotifications);
+router.get("/", controller.getNotifications);
 
-router.patch('/:id/read',controller.markAsRead);
-router.patch('/read/all', controller.markAllAsRead);
+router.patch("/:id/read", controller.markAsRead);
+router.patch("/read/all", controller.markAllAsRead);
 
-router.delete('/:id', controller.deleteNotification);
-
-
+router.delete("/:id", controller.deleteNotification);
 
 module.exports = router;

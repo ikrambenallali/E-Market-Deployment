@@ -51,7 +51,9 @@ describe("Order Controller - Integration Tests", () => {
       };
 
       const orderSaveStub = sinon.stub().resolves();
-      sinon.stub(Cart, "findOne").returns({ populate: sinon.stub().resolves(mockCart) });
+      sinon
+        .stub(Cart, "findOne")
+        .returns({ populate: sinon.stub().resolves(mockCart) });
       sinon.stub(Orders.prototype, "save").callsFake(orderSaveStub);
 
       await createOrder(req, res);
@@ -62,20 +64,22 @@ describe("Order Controller - Integration Tests", () => {
       expect(res.status.calledWith(201)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Commande créée avec succès"
+        "Commande créée avec succès",
       );
     });
 
     it("renvoie une erreur si le panier est vide", async () => {
       const mockCart = { items: [] };
-      sinon.stub(Cart, "findOne").returns({ populate: sinon.stub().resolves(mockCart) });
+      sinon
+        .stub(Cart, "findOne")
+        .returns({ populate: sinon.stub().resolves(mockCart) });
 
       await createOrder(req, res);
 
       expect(res.status.calledWith(400)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Le panier est vide"
+        "Le panier est vide",
       );
     });
 
@@ -84,14 +88,16 @@ describe("Order Controller - Integration Tests", () => {
         items: [{ product: null, quantity: 1, price: 20 }],
         total: 20,
       };
-      sinon.stub(Cart, "findOne").returns({ populate: sinon.stub().resolves(mockCart) });
+      sinon
+        .stub(Cart, "findOne")
+        .returns({ populate: sinon.stub().resolves(mockCart) });
 
       await createOrder(req, res);
 
       expect(res.status.calledWith(400)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Certains produits du panier n'existent plus."
+        "Certains produits du panier n'existent plus.",
       );
     });
   });
@@ -102,12 +108,16 @@ describe("Order Controller - Integration Tests", () => {
   describe("getOrders", () => {
     it("renvoie la liste des commandes de l'utilisateur", async () => {
       const mockOrders = [{ id: "order1" }, { id: "order2" }];
-      sinon.stub(Orders, "find").returns({ populate: sinon.stub().resolves(mockOrders) });
+      sinon
+        .stub(Orders, "find")
+        .returns({ populate: sinon.stub().resolves(mockOrders) });
 
       await getOrders(req, res, () => {});
 
       expect(res.status.calledWith(200)).to.be.true;
-      expect(res.json.firstCall.args[0]).to.have.property("orders").that.is.an("array");
+      expect(res.json.firstCall.args[0])
+        .to.have.property("orders")
+        .that.is.an("array");
     });
   });
 
@@ -132,7 +142,7 @@ describe("Order Controller - Integration Tests", () => {
       expect(res.status.calledWith(200)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Paiement simulé avec succès"
+        "Paiement simulé avec succès",
       );
     });
 
@@ -145,7 +155,7 @@ describe("Order Controller - Integration Tests", () => {
       expect(res.status.calledWith(404)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Commande introuvable"
+        "Commande introuvable",
       );
     });
   });
@@ -157,7 +167,12 @@ describe("Order Controller - Integration Tests", () => {
     it("met à jour le stock après une commande payée", async () => {
       req.body = { orderId: "order123" };
 
-      const mockProduct = { _id: "prod1", stock: 10, title: "Produit A", save: sinon.stub().resolves() };
+      const mockProduct = {
+        _id: "prod1",
+        stock: 10,
+        title: "Produit A",
+        save: sinon.stub().resolves(),
+      };
       const mockOrder = {
         _id: "order123",
         status: "paid",
@@ -165,7 +180,9 @@ describe("Order Controller - Integration Tests", () => {
         items: [{ product: mockProduct, quantity: 2 }],
       };
 
-      sinon.stub(Orders, "findById").returns({ populate: sinon.stub().resolves(mockOrder) });
+      sinon
+        .stub(Orders, "findById")
+        .returns({ populate: sinon.stub().resolves(mockOrder) });
 
       await updateStockAfterOrder(req, res);
 
@@ -173,41 +190,55 @@ describe("Order Controller - Integration Tests", () => {
       expect(res.status.calledWith(200)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Stock mis à jour avec succès après le paiement."
+        "Stock mis à jour avec succès après le paiement.",
       );
     });
 
     it("renvoie une erreur si la commande n'est pas payée", async () => {
       req.body = { orderId: "order123" };
 
-      const mockOrder = { status: "pending", paymentStatus: "unpaid", items: [] };
-      sinon.stub(Orders, "findById").returns({ populate: sinon.stub().resolves(mockOrder) });
+      const mockOrder = {
+        status: "pending",
+        paymentStatus: "unpaid",
+        items: [],
+      };
+      sinon
+        .stub(Orders, "findById")
+        .returns({ populate: sinon.stub().resolves(mockOrder) });
 
       await updateStockAfterOrder(req, res);
 
       expect(res.status.calledWith(400)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Le paiement n'est pas encore confirmé."
+        "Le paiement n'est pas encore confirmé.",
       );
     });
 
     it("renvoie une erreur si le stock est insuffisant", async () => {
       req.body = { orderId: "order123" };
 
-      const mockProduct = { title: "Produit B", stock: 1, save: sinon.stub().resolves() };
+      const mockProduct = {
+        title: "Produit B",
+        stock: 1,
+        save: sinon.stub().resolves(),
+      };
       const mockOrder = {
         status: "paid",
         paymentStatus: "paid",
         items: [{ product: mockProduct, quantity: 3 }],
       };
 
-      sinon.stub(Orders, "findById").returns({ populate: sinon.stub().resolves(mockOrder) });
+      sinon
+        .stub(Orders, "findById")
+        .returns({ populate: sinon.stub().resolves(mockOrder) });
 
       await updateStockAfterOrder(req, res);
 
       expect(res.status.calledWith(400)).to.be.true;
-      expect(res.json.firstCall.args[0].message).to.include("n'a pas assez de stock");
+      expect(res.json.firstCall.args[0].message).to.include(
+        "n'a pas assez de stock",
+      );
     });
   });
 });

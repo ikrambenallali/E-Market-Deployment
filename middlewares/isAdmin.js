@@ -1,12 +1,11 @@
- const isAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {
   try {
-    
-    if (!req.user || req.user.role !== 'admin') {
+    if (!req.user || req.user.role !== "admin") {
       return res.status(403).json({
         success: false,
         status: 403,
         message: "Accès refusé : vous devez être admin",
-        data: {}
+        data: {},
       });
     }
 
@@ -16,8 +15,8 @@
       success: false,
       status: 500,
       message: "Erreur serveur",
-      data: { error: error.message }
+      data: { error: error.message },
     });
   }
 };
-module.exports=isAdmin;
+module.exports = isAdmin;

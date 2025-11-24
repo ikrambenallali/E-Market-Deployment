@@ -1,7 +1,12 @@
 const { expect } = require("chai");
 const sinon = require("sinon");
 
-const { createOrder, getOrders, simulatePaymentController, updateStockAfterOrder } = require("../controllers/orderController");
+const {
+  createOrder,
+  getOrders,
+  simulatePaymentController,
+  updateStockAfterOrder,
+} = require("../controllers/orderController");
 const Orders = require("../models/Order");
 const Cart = require("../models/Cart");
 const Product = require("../models/products");
@@ -13,11 +18,11 @@ describe("Order Controller", () => {
     req = {
       user: { id: "user123" },
       body: {},
-      params: {}
+      params: {},
     };
     res = {
       status: sinon.stub().returnsThis(),
-      json: sinon.stub()
+      json: sinon.stub(),
     };
   });
 
@@ -32,19 +37,24 @@ describe("Order Controller", () => {
         user: "user123",
         items: [
           {
-            product: { _id: "prod1", seller: "seller1", title: "Produit 1", price: 100 },
+            product: {
+              _id: "prod1",
+              seller: "seller1",
+              title: "Produit 1",
+              price: 100,
+            },
             quantity: 2,
-            price: 100
-          }
+            price: 100,
+          },
         ],
         total: 200,
-        save: sinon.stub().resolves()
+        save: sinon.stub().resolves(),
       };
 
       const mockOrder = { _id: "order123", save: sinon.stub().resolves() };
 
       sinon.stub(Cart, "findOne").returns({
-        populate: sinon.stub().resolves(mockCart)
+        populate: sinon.stub().resolves(mockCart),
       });
       sinon.stub(Orders.prototype, "save").resolves(mockOrder);
 
@@ -60,7 +70,7 @@ describe("Order Controller", () => {
       const mockCart = { user: "user123", items: [] };
 
       sinon.stub(Cart, "findOne").returns({
-        populate: sinon.stub().resolves(mockCart)
+        populate: sinon.stub().resolves(mockCart),
       });
 
       await createOrder(req, res);
@@ -73,18 +83,20 @@ describe("Order Controller", () => {
     it("renvoie une erreur si certains produits du panier n'existent plus", async () => {
       const mockCart = {
         user: "user123",
-        items: [{ product: null, quantity: 1, price: 100 }]
+        items: [{ product: null, quantity: 1, price: 100 }],
       };
 
       sinon.stub(Cart, "findOne").returns({
-        populate: sinon.stub().resolves(mockCart)
+        populate: sinon.stub().resolves(mockCart),
       });
 
       await createOrder(req, res);
 
       expect(res.status.calledWith(400)).to.be.true;
       const response = res.json.firstCall.args[0];
-      expect(response.message).to.equal("Certains produits du panier n'existent plus.");
+      expect(response.message).to.equal(
+        "Certains produits du panier n'existent plus.",
+      );
     });
   });
 
@@ -94,7 +106,7 @@ describe("Order Controller", () => {
       const mockOrders = [{ _id: "order1" }, { _id: "order2" }];
 
       sinon.stub(Orders, "find").returns({
-        populate: sinon.stub().resolves(mockOrders)
+        populate: sinon.stub().resolves(mockOrders),
       });
 
       await getOrders(req, res);
@@ -140,30 +152,36 @@ describe("Order Controller", () => {
     it("met à jour le stock avec succès", async () => {
       req.body = { orderId: "order123" };
 
-      const mockProduct = { title: "Produit 1", stock: 10, save: sinon.stub().resolves() };
+      const mockProduct = {
+        title: "Produit 1",
+        stock: 10,
+        save: sinon.stub().resolves(),
+      };
       const mockOrder = {
         _id: "order123",
         status: "paid",
         paymentStatus: "paid",
-        items: [{ product: mockProduct, quantity: 2 }]
+        items: [{ product: mockProduct, quantity: 2 }],
       };
 
       sinon.stub(Orders, "findById").returns({
-        populate: sinon.stub().resolves(mockOrder)
+        populate: sinon.stub().resolves(mockOrder),
       });
 
       await updateStockAfterOrder(req, res);
 
       expect(res.status.calledWith(200)).to.be.true;
       const response = res.json.firstCall.args[0];
-      expect(response.message).to.equal("Stock mis à jour avec succès après le paiement.");
+      expect(response.message).to.equal(
+        "Stock mis à jour avec succès après le paiement.",
+      );
     });
 
     it("renvoie une erreur si la commande est introuvable", async () => {
       req.body = { orderId: "order123" };
 
       sinon.stub(Orders, "findById").returns({
-        populate: sinon.stub().resolves(null)
+        populate: sinon.stub().resolves(null),
       });
 
       await updateStockAfterOrder(req, res);
@@ -179,14 +197,16 @@ describe("Order Controller", () => {
       const mockOrder = { status: "pending", paymentStatus: "unpaid" };
 
       sinon.stub(Orders, "findById").returns({
-        populate: sinon.stub().resolves(mockOrder)
+        populate: sinon.stub().resolves(mockOrder),
       });
 
       await updateStockAfterOrder(req, res);
 
       expect(res.status.calledWith(400)).to.be.true;
       const response = res.json.firstCall.args[0];
-      expect(response.message).to.equal("Le paiement n'est pas encore confirmé.");
+      expect(response.message).to.equal(
+        "Le paiement n'est pas encore confirmé.",
+      );
     });
 
     it("renvoie une erreur si le stock est insuffisant", async () => {
@@ -196,11 +216,11 @@ describe("Order Controller", () => {
       const mockOrder = {
         status: "paid",
         paymentStatus: "paid",
-        items: [{ product: mockProduct, quantity: 5 }]
+        items: [{ product: mockProduct, quantity: 5 }],
       };
 
       sinon.stub(Orders, "findById").returns({
-        populate: sinon.stub().resolves(mockOrder)
+        populate: sinon.stub().resolves(mockOrder),
       });
 
       await updateStockAfterOrder(req, res);

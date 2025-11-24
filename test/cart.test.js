@@ -1,7 +1,12 @@
 const { expect } = require("chai");
 const sinon = require("sinon");
 
-const { addToCart, getCart, updateCartItem, deleteCartItem } = require("../controllers/cartController");
+const {
+  addToCart,
+  getCart,
+  updateCartItem,
+  deleteCartItem,
+} = require("../controllers/cartController");
 const Cart = require("../models/Cart");
 const Product = require("../models/products");
 
@@ -12,11 +17,11 @@ describe("Cart Controller", () => {
     req = {
       user: { id: "user123" },
       body: {},
-      params: {}
+      params: {},
     };
     res = {
       status: sinon.stub().returnsThis(),
-      json: sinon.stub()
+      json: sinon.stub(),
     };
   });
 
@@ -27,7 +32,12 @@ describe("Cart Controller", () => {
   // ✅ TEST: addToCart
   describe("addToCart", () => {
     const mockProduct = { _id: "prod123", price: 100, stock: 10 };
-    const mockCart = { user: "user123", items: [], save: sinon.stub().resolves(), total: 0 };
+    const mockCart = {
+      user: "user123",
+      items: [],
+      save: sinon.stub().resolves(),
+      total: 0,
+    };
 
     beforeEach(() => {
       req.body = { productId: "prod123", quantity: 2 };
@@ -62,10 +72,13 @@ describe("Cart Controller", () => {
   // ✅ TEST: getCart
   describe("getCart", () => {
     it("renvoie le panier de l'utilisateur avec succès", async () => {
-      const mockCart = { user: "user123", items: [{ product: "prod1", quantity: 2 }] };
+      const mockCart = {
+        user: "user123",
+        items: [{ product: "prod1", quantity: 2 }],
+      };
 
       const findOneStub = sinon.stub(Cart, "findOne").returns({
-        populate: sinon.stub().resolves(mockCart)
+        populate: sinon.stub().resolves(mockCart),
       });
 
       await getCart(req, res);
@@ -78,7 +91,7 @@ describe("Cart Controller", () => {
 
     it("renvoie une erreur si le panier est introuvable", async () => {
       const findOneStub = sinon.stub(Cart, "findOne").returns({
-        populate: sinon.stub().resolves(null)
+        populate: sinon.stub().resolves(null),
       });
 
       await getCart(req, res);
@@ -101,7 +114,7 @@ describe("Cart Controller", () => {
       const mockCart = {
         user: "user123",
         items: [{ product: "prod123", quantity: 1 }],
-        save: sinon.stub().resolves()
+        save: sinon.stub().resolves(),
       };
 
       sinon.stub(Cart, "findOne").resolves(mockCart);
@@ -117,7 +130,7 @@ describe("Cart Controller", () => {
       const mockCart = {
         user: "user123",
         items: [{ product: "autreProd", quantity: 1 }],
-        save: sinon.stub().resolves()
+        save: sinon.stub().resolves(),
       };
 
       sinon.stub(Cart, "findOne").resolves(mockCart);
@@ -140,7 +153,7 @@ describe("Cart Controller", () => {
       const mockCart = {
         user: "user123",
         items: [{ product: "prod123", quantity: 1 }],
-        save: sinon.stub().resolves()
+        save: sinon.stub().resolves(),
       };
 
       sinon.stub(Cart, "findOne").resolves(mockCart);
@@ -149,14 +162,16 @@ describe("Cart Controller", () => {
 
       expect(res.status.calledWith(200)).to.be.true;
       const response = res.json.firstCall.args[0];
-      expect(response.message).to.equal("Produit supprimé du panier avec succès");
+      expect(response.message).to.equal(
+        "Produit supprimé du panier avec succès",
+      );
     });
 
     it("renvoie une erreur si le produit n'existe pas dans le panier", async () => {
       const mockCart = {
         user: "user123",
         items: [{ product: "autreProd", quantity: 1 }],
-        save: sinon.stub().resolves()
+        save: sinon.stub().resolves(),
       };
 
       sinon.stub(Cart, "findOne").resolves(mockCart);

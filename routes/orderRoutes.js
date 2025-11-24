@@ -1,11 +1,15 @@
 const express = require("express");
-const { createOrder ,getOrders ,simulatePaymentController  ,updateStockAfterOrder,updateOrderStatus} = require("../controllers/orderController");
+const {
+  createOrder,
+  getOrders,
+  simulatePaymentController,
+  updateStockAfterOrder,
+  updateOrderStatus,
+} = require("../controllers/orderController");
 const router = express.Router();
 
 const isAdmin = require("../middlewares/isAdmin");
-const {apiLimiter,strictLimiter}=require('../middlewares/rate-limiter');
-
-
+const { apiLimiter, strictLimiter } = require("../middlewares/rate-limiter");
 
 /**
  * @swagger
@@ -86,7 +90,7 @@ router.post("/", strictLimiter, createOrder);
  *       404:
  *         description: Aucune commande trouvée
  */
-router.get("/",apiLimiter, getOrders);
+router.get("/", apiLimiter, getOrders);
 
 /**
  * @swagger
@@ -123,7 +127,7 @@ router.get("/",apiLimiter, getOrders);
  *       404:
  *         description: Commande introuvable
  */
-router.post("/simulate-payment",strictLimiter, simulatePaymentController);
+router.post("/simulate-payment", strictLimiter, simulatePaymentController);
 
 /**
  * @swagger
@@ -146,6 +150,6 @@ router.post("/simulate-payment",strictLimiter, simulatePaymentController);
  *         description: Erreur lors de la mise à jour du stock
  */
 router.put("/", strictLimiter, updateStockAfterOrder);
-router.put("/:orderId/status",strictLimiter,isAdmin, updateOrderStatus);
+router.put("/:orderId/status", strictLimiter, isAdmin, updateOrderStatus);
 
 module.exports = router;

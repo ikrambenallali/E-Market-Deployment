@@ -19,18 +19,16 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    categories: 
-    [
-      { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Category', 
-        required: true 
-      }
-    ],
-    images: 
-    [
+    categories: [
       {
-        type: String, 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        required: true,
+      },
+    ],
+    images: [
+      {
+        type: String,
         trim: true,
       },
     ],
@@ -44,13 +42,13 @@ const productSchema = new mongoose.Schema(
       default: false,
     },
     deletedAt: {
-    type: Date,
-    default: null,
-    }
-},
-{
-  timestamps: true,
-}
+      type: Date,
+      default: null,
+    },
+  },
+  {
+    timestamps: true,
+  },
 );
 
 module.exports = mongoose.model("Product", productSchema);

@@ -6,11 +6,17 @@ const createCouponSchema = yup.object({
     .required("Coupon code is required")
     .min(3, "Code must be at least 3 characters")
     .max(20, "Code cannot exceed 20 characters")
-    .matches(/^[A-Z0-9_-]+$/, "Code must contain only uppercase letters, numbers, underscores, or hyphens"),
+    .matches(
+      /^[A-Z0-9_-]+$/,
+      "Code must contain only uppercase letters, numbers, underscores, or hyphens",
+    ),
 
   type: yup
     .string()
-    .oneOf(["percentage", "fixed"], "Type must be either 'percentage' or 'fixed'")
+    .oneOf(
+      ["percentage", "fixed"],
+      "Type must be either 'percentage' or 'fixed'",
+    )
     .required("Coupon type is required"),
 
   discount: yup
@@ -19,7 +25,8 @@ const createCouponSchema = yup.object({
     .min(1, "Discount must be at least 1")
     .when("type", {
       is: "percentage",
-      then: (schema) => schema.max(100, "Percentage discount cannot exceed 100"),
+      then: (schema) =>
+        schema.max(100, "Percentage discount cannot exceed 100"),
     }),
 
   expirationDate: yup
@@ -33,19 +40,15 @@ const createCouponSchema = yup.object({
     .min(1, "At least one category is required")
     .required("Category ID is required"),
 
-  product_id: yup
-    .string()
-    .required("Product ID is required"),
+  product_id: yup.string().required("Product ID is required"),
 
-  seller: yup
-    .string()
-    .required("Seller ID is required"),
+  seller: yup.string().required("Seller ID is required"),
 
   usesLeft: yup
     .number()
     .required("Number of uses is required")
     .integer("Uses must be an integer")
-    .min(1, "At least one use must be allowed")
+    .min(1, "At least one use must be allowed"),
 });
 
 const updateCouponSchema = yup.object({
@@ -53,18 +56,25 @@ const updateCouponSchema = yup.object({
     .string()
     .min(3, "Code must be at least 3 characters")
     .max(20, "Code cannot exceed 20 characters")
-    .matches(/^[A-Z0-9_-]+$/, "Code must contain only uppercase letters, numbers, underscores, or hyphens"),
+    .matches(
+      /^[A-Z0-9_-]+$/,
+      "Code must contain only uppercase letters, numbers, underscores, or hyphens",
+    ),
 
   type: yup
     .string()
-    .oneOf(["percentage", "fixed"], "Type must be either 'percentage' or 'fixed'"),
+    .oneOf(
+      ["percentage", "fixed"],
+      "Type must be either 'percentage' or 'fixed'",
+    ),
 
   discount: yup
     .number()
     .min(1, "Discount must be at least 1")
     .when("type", {
       is: "percentage",
-      then: (schema) => schema.max(100, "Percentage discount cannot exceed 100"),
+      then: (schema) =>
+        schema.max(100, "Percentage discount cannot exceed 100"),
     }),
 
   expirationDate: yup
@@ -73,7 +83,7 @@ const updateCouponSchema = yup.object({
 
   product_id: yup.string(),
   seller: yup.string(),
-  usesLeft: yup.number().integer().min(0)
+  usesLeft: yup.number().integer().min(0),
 });
 
 module.exports = { createCouponSchema, updateCouponSchema };

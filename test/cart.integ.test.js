@@ -51,7 +51,7 @@ describe("Cart Controller - Integration Tests", () => {
       expect(res.status.calledWith(200)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Produit ajouté au panier avec succès"
+        "Produit ajouté au panier avec succès",
       );
     });
 
@@ -64,7 +64,7 @@ describe("Cart Controller - Integration Tests", () => {
       expect(res.status.calledWith(404)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Produit introuvable"
+        "Produit introuvable",
       );
     });
 
@@ -77,7 +77,7 @@ describe("Cart Controller - Integration Tests", () => {
       expect(res.status.calledWith(400)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Stock insuffisant"
+        "Stock insuffisant",
       );
     });
   });
@@ -111,7 +111,7 @@ describe("Cart Controller - Integration Tests", () => {
       expect(res.status.calledWith(404)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Panier introuvable"
+        "Panier introuvable",
       );
     });
   });
@@ -137,7 +137,7 @@ describe("Cart Controller - Integration Tests", () => {
       expect(res.status.calledWith(200)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Quantité mise à jour avec succès"
+        "Quantité mise à jour avec succès",
       );
     });
 
@@ -155,7 +155,7 @@ describe("Cart Controller - Integration Tests", () => {
       expect(res.status.calledWith(404)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Produit introuvable dans le panier"
+        "Produit introuvable dans le panier",
       );
     });
   });
@@ -179,7 +179,7 @@ describe("Cart Controller - Integration Tests", () => {
       expect(res.status.calledWith(200)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Produit supprimé du panier avec succès"
+        "Produit supprimé du panier avec succès",
       );
     });
 
@@ -192,7 +192,7 @@ describe("Cart Controller - Integration Tests", () => {
       expect(res.status.calledWith(404)).to.be.true;
       expect(res.json.firstCall.args[0]).to.have.property(
         "message",
-        "Panier introuvable"
+        "Panier introuvable",
       );
     });
   });

@@ -1,6 +1,6 @@
 const Products = require("../models/products");
 const Category = require("../models/categories");
-const NotificationEmitter = require('../events/notificationEmitter');
+const NotificationEmitter = require("../events/notificationEmitter");
 // const { file } = require("bun");
 
 /**
@@ -64,7 +64,7 @@ async function getProducts(req, res, next) {
         status: 404,
         message: "no products found",
         data: null,
-      }); 
+      });
     }
     res.status(200).json({
       success: true,
@@ -72,7 +72,7 @@ async function getProducts(req, res, next) {
       message: "all products found",
       data: {
         products: products,
-      }
+      },
     });
   } catch (error) {
     next(error);
@@ -117,7 +117,7 @@ async function getOneProduct(req, res, next) {
       message: "product ound succesfully",
       data: {
         product: product,
-      }
+      },
     });
   } catch (error) {
     next(error);
@@ -147,7 +147,7 @@ async function getOneProduct(req, res, next) {
 async function createProduct(req, res, next) {
   try {
     const { title, description, price, stock, categories } = req.body;
-    
+
     console.log("request body fiha hadchi .. :", req.body);
     const seller = req.user._id;
     console.log("hahoa seller dyalna :", seller);
@@ -158,13 +158,16 @@ async function createProduct(req, res, next) {
       return res.status(400).json({ message: "Product already exists" });
     }
 
-    const images = req.files?.map((file) => `/uploads/products/${file.filename}`) || [];
+    const images =
+      req.files?.map((file) => `/uploads/products/${file.filename}`) || [];
 
     const categoryExists = await Category.find({ _id: { $in: categories } });
     if (categoryExists.length !== categories.length) {
-      return res.status(404).json({ message: 'One or more categories not found' });
+      return res
+        .status(404)
+        .json({ message: "One or more categories not found" });
     }
-  
+
     const product = await Products.create({
       title,
       description,
@@ -175,12 +178,13 @@ async function createProduct(req, res, next) {
       images,
       isActive: true,
     });
-   if (process.env.NODE_ENV !== "test") {
-NotificationEmitter.emit('NEW_PRODUCT', {
-  recipient: product.seller,
-  productId: product._id,
-  productName: product.title,
-});}
+    if (process.env.NODE_ENV !== "test") {
+      NotificationEmitter.emit("NEW_PRODUCT", {
+        recipient: product.seller,
+        productId: product._id,
+        productName: product.title,
+      });
+    }
 
     res.status(201).json({
       success: true,
@@ -189,7 +193,7 @@ NotificationEmitter.emit('NEW_PRODUCT', {
       status: "success",
       data: {
         product: product,
-      }
+      },
     });
   } catch (error) {
     next(error);
@@ -240,26 +244,27 @@ NotificationEmitter.emit('NEW_PRODUCT', {
 async function editProduct(req, res, next) {
   try {
     const id = req.params.id;
-    const newImages = req.files?.map((file) => `/uploads/products/${file.filename}`) || [];
+    const newImages =
+      req.files?.map((file) => `/uploads/products/${file.filename}`) || [];
 
     const updatedProduct = await Products.findByIdAndUpdate(
       id,
       {
         ...req.body,
-        ...(newImages.length > 0 && { images: newImages }), 
+        ...(newImages.length > 0 && { images: newImages }),
       },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedProduct) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
         status: 404,
         message: "Product not found",
         data: null,
-       });
+      });
     }
-    
+
     res.status(200).json({
       success: true,
       status: 200,
@@ -331,7 +336,7 @@ async function activateProduct(req, res, next) {
 
     res.status(200).json({
       success: true,
-      status: 200, 
+      status: 200,
       message: "Product activated successfully",
       data: {
         product: product,
@@ -358,10 +363,10 @@ async function deactivationProduct(req, res, next) {
     product.isActive = false;
     await product.save();
 
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
       status: 200,
-      message: "Product deactivated successfully", 
+      message: "Product deactivated successfully",
       data: {
         product: product,
       },

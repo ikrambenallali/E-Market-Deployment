@@ -1,0 +1,6 @@
+# Ignorer les workflows GitHub Actions
+.github/workflows/*.yml
+.github/workflows/*.yaml
+
+# Ignorer docker-compose
+docker-compose.yml

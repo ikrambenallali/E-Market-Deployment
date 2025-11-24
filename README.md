@@ -7,18 +7,19 @@ Developed by **Team YouCreative** at **YouCode Nador**, this version transforms 
 
 ## 👥 Team Members
 
-| Name | Role |
-|------|------|
-| **Mohammed Latrach** | Full Stack Developer / Project Lead |
-| **Ayoub Jebbouri** | Full Stack Developer |
-| **Ikram El Benellali** | Full Stack Developer |
-| **Meriem El Mecaniqui** | Full Stack Developer |
+| Name                    | Role                                |
+| ----------------------- | ----------------------------------- |
+| **Mohammed Latrach**    | Full Stack Developer / Project Lead |
+| **Ayoub Jebbouri**      | Full Stack Developer                |
+| **Ikram El Benellali**  | Full Stack Developer                |
+| **Meriem El Mecaniqui** | Full Stack Developer                |
 
 ---
 
 ## 🚀 Overview
 
 **E-Market API – Sellers & Security** enables:
+
 - Users to register, authenticate, and manage their profiles.
 - Sellers to publish, update, and manage their products.
 - Buyers to explore products, manage carts, and place orders.
@@ -30,37 +31,44 @@ Developed by **Team YouCreative** at **YouCode Nador**, this version transforms 
 ## 🧩 Features
 
 ### 👤 User Management
+
 - Sign up / Login with **JWT authentication**
 - Role system: `user`, `seller`, `admin`
 - Profile management (view & update)
 - Admins can promote users to sellers
 
 ### 🏪 Seller Space
+
 - Create, edit, and delete own products
 - Secure **image upload (Multer)**
 - Product visibility control and validation
 - Link between product and seller
 
 ### 🔎 Product Catalog
+
 - Search, filter, and paginate results
 - Sort by price, date, or popularity
 
 ### 🛒 Cart & Orders
+
 - Add / remove items from cart
 - Checkout with simulated payment
 - Order status tracking: pending → paid → shipped → delivered → canceled
 - Stock validation during checkout
 
 ### 🎟️ Coupons System
+
 - Percentage or fixed amount discounts
 - Validation: expiration, usage, min amount, etc.
 
 ### ⭐ Reviews & Ratings
+
 - One review per user per product
 - Admin moderation support
 - View average product ratings
 
 ### 🔐 Security
+
 - JWT Authentication & Role-based access
 - Validation with **Joi** / **express-validator**
 - Secure headers via **Helmet**
@@ -69,6 +77,7 @@ Developed by **Team YouCreative** at **YouCode Nador**, this version transforms 
 - Centralized error handling
 
 ### 🧪 Testing
+
 - Unit & integration tests with **Mocha**, **Chai**, and **Supertest**
 - Coverage for authentication, product, cart, and coupon flow
 
@@ -100,18 +109,22 @@ Developed by **Team YouCreative** at **YouCode Nador**, this version transforms 
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone the repository
+
 ```bash
 git clone https://github.com/LatrachDev/E-Market-API-Sellers-Security.git
 cd E-Market-API-Sellers-Security
 ```
 
 ### 2️⃣ Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 3️⃣ Configure environment variables
+
 Create a `.env` file at the root and include:
+
 ```
 PORT=5000
 MONGO_URI=your_mongodb_uri
@@ -121,6 +134,7 @@ UPLOAD_PATH=uploads/
 ```
 
 ### 4️⃣ Run the project
+
 ```bash
 # Development mode
 npm run dev
@@ -140,6 +154,7 @@ GET /api-docs
 ```
 
 Includes:
+
 - Endpoints for users, products, carts, orders, coupons, and reviews.
 - Request/response examples.
 - Role-based access notes.
@@ -148,23 +163,25 @@ Includes:
 
 ## 🧰 Scripts
 
-| Command | Description |
-|----------|-------------|
-| `npm run dev` | Start server in development mode |
-| `npm start` | Start server in production mode |
+| Command        | Description                                    |
+| -------------- | ---------------------------------------------- |
+| `npm run dev`  | Start server in development mode               |
+| `npm start`    | Start server in production mode                |
 | `npm run test` | Run automated tests (Mocha + Chai + Supertest) |
-| `npm run seed` | Seed the database with initial data |
+| `npm run seed` | Seed the database with initial data            |
 
 ---
 
 ## 🧪 Tests
 
 Run unit and integration tests:
+
 ```bash
 npm test
 ```
 
 Tests cover:
+
 - User registration and login
 - Role-based access
 - Product creation & retrieval
@@ -176,6 +193,7 @@ Tests cover:
 ## 🧱 Database Design
 
 The **MCD / Class Diagram** defines key entities and relationships:
+
 - **User** (1) — (N) **Product**
 - **User** (1) — (N) **Order**
 - **Product** (1) — (N) **Review**
@@ -188,27 +206,27 @@ The **MCD / Class Diagram** defines key entities and relationships:
 
 ## 🧰 Technologies Used
 
-| Category | Tools |
-|-----------|-------|
-| **Backend** | Node.js, Express.js |
-| **Database** | MongoDB, Mongoose |
-| **Security** | JWT, bcrypt, helmet, cors, express-rate-limit |
-| **Validation** | Joi / express-validator |
-| **Testing** | Mocha, Chai, Supertest |
-| **Upload** | Multer |
-| **Documentation** | Swagger UI |
+| Category          | Tools                                         |
+| ----------------- | --------------------------------------------- |
+| **Backend**       | Node.js, Express.js                           |
+| **Database**      | MongoDB, Mongoose                             |
+| **Security**      | JWT, bcrypt, helmet, cors, express-rate-limit |
+| **Validation**    | Joi / express-validator                       |
+| **Testing**       | Mocha, Chai, Supertest                        |
+| **Upload**        | Multer                                        |
+| **Documentation** | Swagger UI                                    |
 
 ---
 
 ## 📦 Deliverables
 
-- ✅ MCD / Diagramme de classes + API schema  
-- ✅ GitHub repository with clear commits  
-- ✅ Complete README (this file)  
-- ✅ Swagger documentation  
-- ✅ Postman export  
-- ✅ Unit & integration tests  
-- ✅ Modular and scalable code  
+- ✅ MCD / Diagramme de classes + API schema
+- ✅ GitHub repository with clear commits
+- ✅ Complete README (this file)
+- ✅ Swagger documentation
+- ✅ Postman export
+- ✅ Unit & integration tests
+- ✅ Modular and scalable code
 
 ---
 
@@ -221,17 +239,17 @@ The **MCD / Class Diagram** defines key entities and relationships:
 ✔ Passing test suites  
 ✔ Clear modular architecture  
 ✔ Updated documentation  
-✔ Presentation quality and delivery on time  
+✔ Presentation quality and delivery on time
 
 ---
 
 ## 📅 Timeline
 
-| Phase | Date |
-|-------|------|
-| **Start** | 13/10/2025 |
+| Phase        | Date       |
+| ------------ | ---------- |
+| **Start**    | 13/10/2025 |
 | **Deadline** | 17/10/2025 |
-| **Duration** | 5 days |
+| **Duration** | 5 days     |
 
 ---
 

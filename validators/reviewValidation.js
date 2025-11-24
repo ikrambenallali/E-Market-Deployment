@@ -1,4 +1,4 @@
-const yup = require('yup');
+const yup = require("yup");
 
 const createreViewSchema = yup.object({
   comment: yup
@@ -14,4 +14,4 @@ const createreViewSchema = yup.object({
     .required("Rating is required"),
 });
 
-module.exports = {createreViewSchema};
+module.exports = { createreViewSchema };

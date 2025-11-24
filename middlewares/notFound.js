@@ -3,7 +3,7 @@ function notFound(req, res, next) {
     success: false,
     status: 404,
     error: "Not Found",
-    message: `${req.method} ${req.originalUrl} not found`
+    message: `${req.method} ${req.originalUrl} not found`,
   });
 }
 
